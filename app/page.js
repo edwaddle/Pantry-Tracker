@@ -12,7 +12,7 @@ import {
   deleteDoc,
   getDoc,
 } from 'firebase/firestore'
-
+import Recipes from './pages/recipes';
 const style = {
   position: 'sticky',
   top: '50%',
@@ -195,6 +195,7 @@ export default function Home() {
         <Button variant="contained" onClick={handleOpen}>
           Add New Item
         </Button>
+        <Recipes/>
         <Box border={'1px solid #333'}>
           <Box
             width="800px"
