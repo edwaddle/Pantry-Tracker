@@ -1,3 +1,4 @@
+import React from 'react';
 import {useState, useEffect } from 'react';
 import {Box, Stack, Typography, Button, Modal, TextField}  from '@mui/material';
 import {firestore} from '@/firebase';
@@ -25,12 +26,8 @@ const style = {
 }
 export default function Recipes() {
     const [inventory, setInventory] = useState([]);
-    const [open, setOpen] = useState(false);
-    //open recipe list
+    const [open, setOpen] = useState(false); 
     //add recipe
-    const addRecipe = async (name, array) => {
-        
-    }
     useEffect(() => {
         updateInventory();
     }, [])
@@ -40,10 +37,30 @@ export default function Recipes() {
         const docs = await getDocs(snapshot);
         const inventoryList = [];
         docs.forEach((doc) => {
-            inventory.push({name: doc.id, ...doc.data()})
-
+            /*
+            const arrayResult = Object.keys(doc.data).map(data => {
+                return {id: data,...data.data()} 
+            });
+            */
+            inventoryList.push({type: doc.id, ...doc.data()})
         })
         setInventory(inventoryList);
+
+    }
+
+    const getFood = (Food2) => {
+        /*
+        let returnString = "";
+        for (let i = 0; i < Object.keys(Food2).length; i++){
+            returnString += (Object.keys(Food2)[i] + ": " + Object.values(Food2)[i] + "<br />")
+        }
+        return returnString;
+        */
+        return Object.keys(Food2).map((key, index) => (
+            <React.Fragment key={index}>
+                {key}: {Food2[key] + ""}<br />
+            </React.Fragment>
+        ));
 
     }
     //get possible recipes
@@ -68,8 +85,28 @@ export default function Recipes() {
                     <Typography varaint="h6" component="h3" sx={{color: "#1565c0"}}>
                         Recipe List
                     </Typography>
-                    <Stack width="100%" direction ={'row'} spacing={2}>
-                        some recipe
+                    <Stack width="100%" direction ={'column'} spacing={2}>
+                        {inventory.map(({type, Food2}) => (
+                            <Box
+                            key={type}
+                            width="100%"
+                            minHeight="150px"
+                            display={'flex'}
+                            justifyContent={'space-between'}
+                            alignItems={'center'}
+                            bgcolor={'#f0f0f0'}
+                            paddingX={5}>
+                                <Typography varaint={'h3'} color ={'#333'} textAlign={'center'}>
+                                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                                </Typography>
+                                <Typography variant={'h6'} color={'#333'} textAlign={'center'} fontSize={10}>
+                                    {
+                                        getFood(Food2)
+                                        
+                                    }
+                                </Typography>
+                            </Box>
+                        ))}
                         <Button
                         variant="contained"
                         onClick={() => {
@@ -85,11 +122,12 @@ export default function Recipes() {
                 <Button
                 varaint="contained"
                 sx={{position:"absolute"}}
-                onClick={()=> {
+                onClick={async ()=> {
                     handleOpen()
                 }}
                 >
                     something
+                    
                 </Button>
             </Box>
             

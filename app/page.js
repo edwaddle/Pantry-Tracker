@@ -191,11 +191,10 @@ export default function Home() {
 
         </Modal>
 
-
+        <Recipes/>
         <Button variant="contained" onClick={handleOpen}>
           Add New Item
         </Button>
-        <Recipes/>
         <Box border={'1px solid #333'}>
           <Box
             width="800px"
