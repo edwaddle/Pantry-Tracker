@@ -1,6 +1,6 @@
 import React from 'react';
 import {useState, useEffect } from 'react';
-import {Box, Stack, Typography, Button, Modal, TextField}  from '@mui/material';
+import {Box, Stack, Typography, Button, Modal, TextField, Drawer}  from '@mui/material';
 import {firestore} from '@/firebase';
 import {
   collection,
@@ -24,9 +24,9 @@ const style = {
     p: 4, //padding
     boxShadow: 24
 }
-export default function Recipes() {
+export default function Recipes({ingredientList}) {
     const [inventory, setInventory] = useState([]);
-    const [open, setOpen] = useState(false); 
+    const [open, setOpen] = useState(false);
     //add recipe
     useEffect(() => {
         updateInventory();
@@ -37,29 +37,51 @@ export default function Recipes() {
         const docs = await getDocs(snapshot);
         const inventoryList = [];
         docs.forEach((doc) => {
-            /*
-            const arrayResult = Object.keys(doc.data).map(data => {
-                return {id: data,...data.data()} 
-            });
-            */
             inventoryList.push({type: doc.id, ...doc.data()})
         })
         setInventory(inventoryList);
 
     }
 
-    const getFood = (Food2) => {
-        /*
-        let returnString = "";
-        for (let i = 0; i < Object.keys(Food2).length; i++){
-            returnString += (Object.keys(Food2)[i] + ": " + Object.values(Food2)[i] + "<br />")
+    const hasIngredient = (ingredients) => {
+        const realIngredientList = ingredientList.map(({ name }) => name);
+      
+        for (const ingredient of ingredients) {
+          if (!realIngredientList.includes(ingredient)) {
+            return false; // Return false if an ingredient is not found
+          }
         }
-        return returnString;
-        */
+      
+        return true; // Return true if all ingredients are found
+    };
+
+    const getFood = (Food2) => {
+        
         return Object.keys(Food2).map((key, index) => (
-            <React.Fragment key={index}>
-                {key}: {Food2[key] + ""}<br />
-            </React.Fragment>
+            <Box>
+                <Box 
+                key={index}
+                width="40"
+                padding={1}
+                bgcolor={"#bcaaa4"}
+                marginTop={4}
+                marginLeft={4}
+                marginRight={4}
+                boxSizing={"border-box"}
+                >
+                    {console.log(hasIngredient(Food2[key]) + Food2[key]) }
+                    <Typography
+                    display={"flex"}
+                    justifyContent={"center"}
+                    sx={{
+                        color: hasIngredient(Food2[key]) === true ? "black" : "white",
+                    }}
+                    >{key}</Typography>
+                    <Typography
+                    textAlign={"left"}>{Food2[key] + ""}</Typography>
+                    {/*{key}: {Food2[key] + ""}<br /> */}
+                </Box>
+            </Box>
         ));
 
     }
@@ -69,19 +91,25 @@ export default function Recipes() {
     const handleClose = () => setOpen(false)
     
     return (
+
         <Box
         width = "100vw"
-        height="100vh"
+        minHeight = "100vh"
         display={'flex'}
         justifyContent={"center"}
         flexDirection={"column"}
         alignItems={"center"}
         gap={2}
         position={"absolute"}>
+            {/*}
             <Modal
             open={open}
             onClose = {handleClose}>
-                <Box sx = {style}>
+                
+            </Modal>
+            {*/}
+            <Drawer open={open} onClose={handleClose} anchor={"right"}>
+            <Box >
                     <Typography varaint="h6" component="h3" sx={{color: "#1565c0"}}>
                         Recipe List
                     </Typography>
@@ -89,21 +117,19 @@ export default function Recipes() {
                         {inventory.map(({type, Food2}) => (
                             <Box
                             key={type}
-                            width="100%"
-                            minHeight="150px"
-                            display={'flex'}
-                            justifyContent={'space-between'}
-                            alignItems={'center'}
-                            bgcolor={'#f0f0f0'}
-                            paddingX={5}>
+                            sx={{width:'minContent'}}
+                            minHeight="250px"
+                            height = "auto"
+                            bgcolor="#d7ccc8">
                                 <Typography varaint={'h3'} color ={'#333'} textAlign={'center'}>
                                     {type.charAt(0).toUpperCase() + type.slice(1)}
                                 </Typography>
-                                <Typography variant={'h6'} color={'#333'} textAlign={'center'} fontSize={10}>
+                                <Typography variant={'h4'} color={'#333'} textAlign={'center'} fontSize={20} multiline>
                                     {
                                         getFood(Food2)
-                                        
+
                                     }
+
                                 </Typography>
                             </Box>
                         ))}
@@ -116,7 +142,7 @@ export default function Recipes() {
                         </Button>
                     </Stack>
                 </Box>
-            </Modal>
+            </Drawer>
             <Box
             sx={{transform: 'translateX(40vw) translateY(40vh)'}}>
                 <Button
