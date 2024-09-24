@@ -75,7 +75,7 @@ export default function Home() {
         styleOverrides: {
           root: {
             padding: "8px",
-            borderRadius: "12px",
+            borderRadius: "16px",
             /*
             backgroundColor: "#CCD5AE",
             color: "#7c7575",
@@ -181,13 +181,23 @@ export default function Home() {
       bgcolor={'#FEFAE0'}
       >
         <Box
+        sx={{position:'fixed',
+          left: "24px",
+          bottom:"10px"
+        }}
+        height={"100px"}
+        width={"125px"}>
+          <Recipes ingredientList={getInventory()}/>
+        </Box>
+        
+        <Box
         sx={headerStyle}>
           <Box>Your Pantry Tracker</Box>
           <Box> the searchbar</Box>
             
         </Box>
         
-        <Recipes ingredientList={getInventory()}/>
+        
 
         <Modal //add new item popup
           open={open}
@@ -274,22 +284,39 @@ export default function Home() {
             display={'flex'}
             justifyContent={'center'}
             alignItems={'center'}
+            borderRadius={"16px"}
+            color={'#3A3B3C'} 
+            margin={"16px"}
             >
-              <Typography variant={'h2'} color={'#3A3B3C'} textAlign={'center'}>
+              <Typography variant={'h2'}  textAlign={'center'}>
                 Inventory Items
               </Typography>
             </Box>
-            <Stack width="1000px" height="300px" spacing={2} overflow={'auto'}>
+            <Stack 
+            maxWidth="800px" 
+            height="500px" 
+            spacing={2} 
+            display={"flex"} 
+            flexDirection={"row"} 
+            flexWrap={"wrap"} 
+            overflow={'auto'} 
+            margin={'12px'} 
+            useFlexGap
+            justifyContent={"center"}>
               {inventory.map(({name, quantity, calorie}) => (
                 <Box
                   key={name}
-                  width="100%"
-                  minHeight="150px"
+                  width="320px"
+                  height="280px"
                   display={'flex'}
+                  flexDirection={"column"}
                   justifyContent={'space-between'}
                   alignItems={'center'}
-                  bgcolor={'#f0f0f0'}
+                  bgcolor={'white'}
                   paddingX={5}
+                  borderRadius={"16px"}
+                  boxShadow={3}
+                  margin={0}
                 >
                   <Typography variant={'h3'} color={'#3A3B3C'} textAlign={'center'}>
                     {name.charAt(0).toUpperCase() + name.slice(1)}
@@ -311,6 +338,7 @@ export default function Home() {
                 </Box>
               ))}
             </Stack>
+            
         </Box>
         
       </Box>

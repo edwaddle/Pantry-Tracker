@@ -92,15 +92,7 @@ export default function Recipes({ingredientList}) {
     
     return (
 
-        <Box
-        width = "100vw"
-        minHeight = "100vh"
-        display={'flex'}
-        justifyContent={"center"}
-        flexDirection={"column"}
-        alignItems={"center"}
-        gap={2}
-        position={"absolute"}>
+        <>
             {/*}
             <Modal
             open={open}
@@ -144,7 +136,13 @@ export default function Recipes({ingredientList}) {
                 </Box>
             </Drawer>
             <Box
-            sx={{transform: 'translateX(40vw) translateY(40vh)'}}>
+            height={"40px"}
+             bgcolor={"#CCD5AE"}
+             borderRadius={"16px"}
+             display={"flex"}
+            justifyContent={"center"}>
+                
+            {/*sx={/{transform: 'translateX(40vw) translateY(40vh)'}}> */}
                 <Button
                 varaint="contained"
                 sx={{position:"absolute"}}
@@ -152,13 +150,13 @@ export default function Recipes({ingredientList}) {
                     handleOpen()
                 }}
                 >
-                    something
+                    <Typography>Recipe List</Typography>
                     
                 </Button>
             </Box>
             
             
-        </Box>
+        </>
         
     );
 }
